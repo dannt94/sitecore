@@ -33,7 +33,7 @@ spec:
           command: ["pwsh", "-Command", "do { Start-Sleep -Seconds 3 } until ($(try {(iwr http://xdbcollection/healthz/ready).StatusCode -eq 200} catch { $false }));"]
       containers:
       - name: sitecore-xp1-prc
-        image: scr.sitecore.com/sxp/sitecore-xp1-prc:10.0.0-ltsc2019
+        image: sitecore-xp1-prc
         ports:
         - containerPort: 80
         env:
@@ -132,6 +132,11 @@ spec:
           value: Data Source=$(Database_Server);Initial Catalog=Sitecore.Reporting;User ID=$(Reporting_Database_Username);Password=$(Reporting_Database_Password);
         - name: Sitecore_ConnectionStrings_XConnect.Collection
           value: http://xdbcollection
+        - name: MEDIA_REQUEST_PROTECTION_SHARED_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: sitecore-protect-media-requests
+              key: sitecore-media-request-protection-shared-secret.txt
         livenessProbe:
           httpGet:
             path: /healthz/live
@@ -152,6 +157,12 @@ spec:
           timeoutSeconds: 300
           periodSeconds: 30
           failureThreshold: 10
+        resources:
+          requests:
+            memory: 500Mi
+            cpu: 200m
+          limits:
+            memory: 1.5Gi
+            cpu: 500m
       imagePullSecrets:
       - name: sitecore-docker-registry
-

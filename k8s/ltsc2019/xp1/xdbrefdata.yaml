@@ -29,7 +29,7 @@ spec:
         kubernetes.io/os: windows
       containers:
       - name: sitecore-xp1-xdbrefdata
-        image: scr.sitecore.com/sxp/sitecore-xp1-xdbrefdata:10.0.0-ltsc2019
+        image: sitecore-xp1-xdbrefdata
         ports:
         - containerPort: 80
         env:
@@ -75,6 +75,12 @@ spec:
           timeoutSeconds: 300
           periodSeconds: 30
           failureThreshold: 10
+        resources:
+          requests:
+            memory: 500Mi
+            cpu: 150m
+          limits:
+            memory: 1Gi
+            cpu: 350m
       imagePullSecrets:
       - name: sitecore-docker-registry
-

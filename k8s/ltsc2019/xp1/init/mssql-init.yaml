@@ -5,11 +5,13 @@ metadata:
 spec:
   template:
     spec:
+      nodeSelector:
+        kubernetes.io/os: windows
       imagePullSecrets:
         - name: sitecore-docker-registry
       containers:
       - name: mssql-init
-        image: scr.sitecore.com/sxp/sitecore-xp1-mssql-init:10.0.0-ltsc2019
+        image: sitecore-xp1-mssql-init
         env:
         - name: sitecore_admin_password
           valueFrom:
@@ -178,4 +180,3 @@ spec:
               key: sitecore-collection-shardmapmanager-database-password.txt
       restartPolicy: Never
   backoffLimit: 5
-

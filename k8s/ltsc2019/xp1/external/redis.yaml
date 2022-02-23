@@ -25,13 +25,28 @@ spec:
       labels:
         app: redis
     spec:
+      volumes:
+        - emptyDir: {}
+          name: data
       nodeSelector:
-        kubernetes.io/os: windows
+        kubernetes.io/os: linux
       containers:
       - name: sitecore-redis
-        image: scr.sitecore.com/sxp/sitecore-redis:10.0.0-ltsc2019
+        image: redis
         ports:
         - containerPort: 6379
-      imagePullSecrets:
-      - name: sitecore-docker-registry
-
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+        volumeMounts:
+          - mountPath: /data
+            name: data
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 100m
+          limits:
+            memory: 2500Mi
+            cpu: 500m      
